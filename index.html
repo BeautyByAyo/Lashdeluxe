@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>BeautyByAyo – Book your appointment</title>
+<style>
+:root{--bg:#fff8f6;--card:#ffffff;--ink:#2b1d20;--mute:#7d6a6e;--line:#f0dcd9;--acc:#b8456b;--acc2:#d9a441;--on:#fff;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1b1315;--card:#271c1f;--ink:#f6e9ea;--mute:#b9a3a7;--line:#3a2a2e;--acc:#e0709a;--acc2:#e6b95a;--on:#1b1315;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#1b1315;--card:#271c1f;--ink:#f6e9ea;--mute:#b9a3a7;--line:#3a2a2e;--acc:#e0709a;--acc2:#e6b95a;--on:#1b1315;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.5}
+.wrap{max-width:560px;margin:0 auto;padding:20px 16px 48px}
+header{text-align:center;padding:28px 0 18px}
+h1{font-family:Georgia,"Times New Roman",serif;font-size:2rem;margin:0;letter-spacing:.5px}
+h1 span{color:var(--acc)}
+.sub{color:var(--mute);margin:6px 0 0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin-top:14px}
+h2{font-family:Georgia,serif;font-size:1.1rem;margin:0 0 10px}
+.step{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--acc);color:var(--on);font:600 .8rem sans-serif;margin-right:8px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+button,.btn{font:inherit;cursor:pointer}
+.chip{border:1px solid var(--line);background:var(--bg);color:var(--ink);padding:9px 14px;border-radius:999px}
+.chip.on{background:var(--acc);border-color:var(--acc);color:var(--on)}
+.chip:disabled{opacity:.35;cursor:not-allowed;text-decoration:line-through}
+.gh{font-weight:600;margin:12px 0 6px;font-size:.9rem;color:var(--mute)}.gh:first-child{margin-top:0}.pr{opacity:.8;font-size:.85em}
+.grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.dow{font-size:.7rem;color:var(--mute);text-align:center}
+.day{border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:10px;padding:8px 0;text-align:center;font-size:.9rem}
+.day small{display:block;font-size:.62rem;color:var(--mute)}
+.day.on{background:var(--acc);color:var(--on);border-color:var(--acc)}
+.day.on small{color:var(--on)}
+.day:disabled{opacity:.3;cursor:not-allowed}
+input,select{font:inherit;width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);margin-top:8px}
+label.chk{display:flex;gap:10px;align-items:flex-start;cursor:pointer}
+label.chk input{width:auto;margin:4px 0 0}
+.dep{margin-top:10px;padding:12px;border:1px dashed var(--acc2);border-radius:12px;background:var(--bg)}
+.acct{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:6px;font-size:1.1rem;font-weight:600}
+.small{font-size:.85rem;color:var(--mute)}
+.cta{display:block;width:100%;text-align:center;background:var(--acc);color:var(--on);border:0;border-radius:12px;padding:14px;font-weight:600;text-decoration:none;margin-top:14px}
+.cta.off{opacity:.4;pointer-events:none}
+.ghost{background:none;border:1px solid var(--line);color:var(--ink);padding:8px 12px;border-radius:10px}
+.row{display:flex;gap:8px}
+.row>*{flex:1}
+.x{margin-left:6px;opacity:.7}
+.admin{border-color:var(--acc2)}
+.msg{margin-top:8px;font-size:.85rem;color:var(--acc)}
+footer{text-align:center;margin-top:26px;color:var(--mute);font-size:.8rem}
+footer button{background:none;border:0;color:var(--mute);text-decoration:underline;font-size:.8rem}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+<h1>Beauty<span>By</span>Ayo</h1>
+<p class="sub">Makeup · Lash Extensions · Nails &amp; Pedicure</p>
+</header>
+<div id="app"></div>
+<footer><p>Appointments are confirmed once Ayo replies on WhatsApp.</p></footer>
+</div>
+<script>
+(function(){
+var S={days:[1,2,3,4,5,6],times:["09:00","11:00","13:00","15:00"],off:[],booked:{}},KEY="",SHA="",REPO="";
+var PHONE="2348169896385",ACCT="8169896385";
+var MENU=[
+{g:"Makeup",items:[["Makeup",0]]},
+{g:"Lash Extensions",items:[["Mini Lash Extensions",6000],["Classic",12000],["Light Hybrid",14000],["Hybrid",16000],["Volume",20000],["Mega Volume",25000],["Bottom Lash",5000],["Lash Removal",4000],["Wispy add-on",5000]]},
+{g:"Nails / Pedicure",items:[["Nails / Pedicure",0]]}];
+function money(n){return "₦"+n.toLocaleString("en-NG")}
+function price(n){var p=0;MENU.forEach(function(g){g.items.forEach(function(i){if(i[0]===n)p=i[1]})});return p}
+function lines(){return st.svc.map(function(n){var p=price(n);return "- "+n+" ("+(p?money(p):"price on request")+")"}).join("\n")}
+function total(){var t=0,r=0;st.svc.forEach(function(n){var p=price(n);p?t+=p:r++});return t?money(t)+(r?" + items priced on request":""):(r?"Price on request":"")}
+var DN=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+var st={svc:[],date:null,time:null,dep:false,owner:false};
+var app=document.getElementById("app");
+function $(s){return document.querySelector(s)}
+function iso(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
+function t12(t){var p=t.split(":").map(Number);return (p[0]%12||12)+":"+String(p[1]).padStart(2,"0")+(p[0]<12?" AM":" PM")}
+function pretty(k){var d=new Date(k+"T00:00:00");return d.toLocaleDateString("en-GB",{weekday:"long",day:"numeric",month:"long"})}
+function dates(){var a=[],d=new Date();d.setHours(0,0,0,0);for(var i=0;i<28;i++){var x=new Date(d);x.setDate(d.getDate()+i);a.push(x)}return a}
+function isOpen(d){return S.days.indexOf(d.getDay())>-1&&S.off.indexOf(iso(d))<0}
+function taken(k,t){return (S.booked[k]||[]).indexOf(t)>-1}
+function freeTimes(k){return S.times.filter(function(t){return !taken(k,t)})}
+
+app.innerHTML=
+'<section class="card"><h2><span class="step">1</span>Choose your services</h2><div id="svc"></div><div class="small" id="tot" style="margin-top:10px"></div></section>'+
+'<section class="card"><h2><span class="step">2</span>Pick a date</h2><div class="grid" id="dow"></div><div class="grid" id="cal" style="margin-top:6px"></div></section>'+
+'<section class="card"><h2><span class="step">3</span>Pick a time</h2><div class="chips" id="tm"></div></section>'+
+'<section class="card"><h2><span class="step">4</span>Your details</h2><input id="nm" placeholder="Full name" autocomplete="name"><input id="ph" placeholder="Phone / WhatsApp number" inputmode="tel" autocomplete="tel">'+
+'<div style="margin-top:12px"><label class="chk"><input type="checkbox" id="dp"><span>Pay a ₦5,000 deposit to secure my slot<br><span class="small">Optional, but deposits are prioritised.</span></span></label></div>'+
+'<div class="dep" id="depbox" hidden><div class="small">Transfer ₦5,000 to Opay:</div><div class="acct"><span>'+ACCT+'</span><button class="ghost" id="cp">Copy</button></div><div class="small" style="margin-top:6px">Then send your receipt on WhatsApp with your booking request below.</div></div>'+
+'<a class="cta off" id="go" target="_blank" rel="noopener">Send booking request on WhatsApp</a><div class="msg" id="hint"></div></section>'+
+'<section class="card admin" id="adm" hidden></section>'+
+'<footer style="margin-top:20px"><button id="own">Owner login</button></footer>';
+
+function renderSvc(){$("#svc").innerHTML=MENU.map(function(g){return '<div class="gh">'+g.g+'</div><div class="chips">'+g.items.map(function(it){var on=st.svc.indexOf(it[0])>-1;return '<button class="chip'+(on?" on":"")+'" data-svc="'+it[0]+'">'+it[0]+' <span class="pr">· '+(it[1]?money(it[1]):"price on request")+'</span></button>'}).join("")+'</div>'}).join("")}
+function renderCal(){
+$("#dow").innerHTML=DN.map(function(n){return '<div class="dow">'+n+'</div>'}).join("");
+var ds=dates(),h="";for(var i=0;i<ds[0].getDay();i++)h+="<div></div>";
+ds.forEach(function(d){var k=iso(d),ok=isOpen(d)&&freeTimes(k).length>0;
+h+='<button class="day'+(st.date===k?" on":"")+'" data-date="'+k+'"'+(ok?"":" disabled")+'>'+d.getDate()+'<small>'+d.toLocaleDateString("en-GB",{month:"short"})+'</small></button>'});
+$("#cal").innerHTML=h}
+function renderTm(){
+if(!st.date){$("#tm").innerHTML='<span class="small">Select a date first.</span>';return}
+var f=freeTimes(st.date);
+$("#tm").innerHTML=f.map(function(t){return '<button class="chip'+(st.time===t?" on":"")+'" data-time="'+t+'">'+t12(t)+'</button>'}).join("")||'<span class="small">No times left this day.</span>'}
+function update(){
+var nm=$("#nm").value.trim(),ph=$("#ph").value.trim();
+var ok=st.svc.length&&st.date&&st.time&&nm&&ph;
+$("#tot").textContent=st.svc.length?"Estimated total: "+total():"";
+var msg="Hello BeautyByAyo, I’d like to book.\n\nServices:\n"+lines()+"\nEstimated total: "+total()+"\nDate: "+(st.date?pretty(st.date):"")+"\nTime: "+(st.time?t12(st.time):"")+"\nName: "+nm+"\nPhone: "+ph+"\nDeposit: "+(st.dep?"I’m paying ₦5,000 via Opay (receipt attached)":"Not paying a deposit now");
+var g=$("#go");g.className="cta"+(ok?"":" off");g.href=ok?"https://wa.me/"+PHONE+"?text="+encodeURIComponent(msg):"#";
+$("#hint").textContent=ok?"":"Complete steps 1–4 to continue."}
+function renderAll(){renderSvc();renderCal();renderTm();update();renderAdm()}
+
+function renderAdm(){
+var box=$("#adm");box.hidden=!st.owner;if(!st.owner)return;
+var offs=S.off.slice().sort(),bk=[];Object.keys(S.booked).sort().forEach(function(k){S.booked[k].forEach(function(t){bk.push([k,t])})});
+box.innerHTML='<h2>Owner dashboard</h2>'+
+'<div class="small">Open days</div><div class="chips" style="margin:6px 0 12px">'+DN.map(function(n,i){return '<button class="chip'+(S.days.indexOf(i)>-1?" on":"")+'" data-wd="'+i+'">'+n+'</button>'}).join("")+'</div>'+
+'<div class="small">Time slots (tap to remove)</div><div class="chips" style="margin:6px 0">'+S.times.map(function(t){return '<button class="chip on" data-rt="'+t+'">'+t12(t)+'<span class="x">×</span></button>'}).join("")+'</div>'+
+'<div class="row"><input type="time" id="nt"><button class="ghost" id="at" style="margin-top:8px">Add time</button></div>'+
+'<div class="small" style="margin-top:14px">Days off / unavailable dates</div><div class="chips" style="margin:6px 0">'+offs.map(function(k){return '<button class="chip on" data-ro="'+k+'">'+pretty(k)+'<span class="x">×</span></button>'}).join("")+'</div>'+
+'<div class="row"><input type="date" id="od"><button class="ghost" id="ao" style="margin-top:8px">Block date</button></div>'+
+'<div class="small" style="margin-top:14px">Mark a slot as booked (hides it from clients)</div><div class="row"><input type="date" id="bd"><select id="bt">'+S.times.map(function(t){return '<option value="'+t+'">'+t12(t)+'</option>'}).join("")+'</select></div><button class="ghost" id="ab" style="margin-top:8px;width:100%">Mark booked</button>'+
+'<div class="chips" style="margin-top:8px">'+bk.map(function(b){return '<button class="chip on" data-rb="'+b[0]+'|'+b[1]+'">'+pretty(b[0])+' · '+t12(b[1])+'<span class="x">×</span></button>'}).join("")+'</div>'+
+'<button class="cta" id="sv">Save &amp; publish changes</button><div class="msg" id="am"></div>'}
+
+function detectRepo(){var h=location.hostname,p=location.pathname.split("/")[1];if(/\.github\.io$/.test(h)){var u=h.split(".")[0];return u+"/"+(p||u+".github.io")}return ""}
+function gh(method,body){return fetch("https://api.github.com/repos/"+REPO+"/contents/availability.json",{method:method,headers:{"Authorization":"Bearer "+KEY,"Accept":"application/vnd.github+json"},body:body?JSON.stringify(body):undefined})}
+function save(){
+var m=$("#am");m.textContent="Saving…";
+var c=btoa(unescape(encodeURIComponent(JSON.stringify(S,null,1))));
+gh("PUT",{message:"Update availability",content:c,sha:SHA}).then(function(r){return r.json().then(function(j){
+if(r.ok){SHA=j.content.sha;m.textContent="Saved ✓ Live for clients in about a minute."}else{m.textContent="Couldn’t save: "+(j.message||"try again")}})}).catch(function(){m.textContent="Couldn’t save. Check your connection."})}
+
+app.addEventListener("click",function(e){
+var b=e.target.closest("button");if(!b)return;var d=b.dataset;
+if(d.svc){var i=st.svc.indexOf(d.svc);i>-1?st.svc.splice(i,1):st.svc.push(d.svc);renderSvc();update()}
+else if(d.date){st.date=d.date;st.time=null;renderCal();renderTm();update()}
+else if(d.time){st.time=d.time;renderTm();update()}
+else if(b.id==="cp"){try{navigator.clipboard.writeText(ACCT);b.textContent="Copied"}catch(x){}}
+else if(b.id==="own"){var pw=window.prompt("Paste your GitHub token");if(pw){login(pw)}}
+else if(!st.owner){return}
+else if(d.wd!==undefined){var w=+d.wd,j=S.days.indexOf(w);j>-1?S.days.splice(j,1):S.days.push(w);renderAll()}
+else if(d.rt){S.times=S.times.filter(function(t){return t!==d.rt});renderAll()}
+else if(d.ro){S.off=S.off.filter(function(k){return k!==d.ro});renderAll()}
+else if(d.rb){var p=d.rb.split("|");S.booked[p[0]]=(S.booked[p[0]]||[]).filter(function(t){return t!==p[1]});if(!S.booked[p[0]].length)delete S.booked[p[0]];renderAll()}
+else if(b.id==="at"){var v=$("#nt").value;if(v&&S.times.indexOf(v)<0){S.times.push(v);S.times.sort();renderAll()}}
+else if(b.id==="ao"){var o=$("#od").value;if(o&&S.off.indexOf(o)<0){S.off.push(o);renderAll()}}
+else if(b.id==="ab"){var k=$("#bd").value,t=$("#bt").value;if(k&&t){S.booked[k]=S.booked[k]||[];if(S.booked[k].indexOf(t)<0)S.booked[k].push(t);renderAll()}}
+else if(b.id==="sv"){save()}
+});
+$("#nm").addEventListener("input",update);$("#ph").addEventListener("input",update);
+$("#dp").addEventListener("change",function(e){st.dep=e.target.checked;$("#depbox").hidden=!st.dep;update()});
+
+function login(tok){
+REPO=REPO||detectRepo()||(window.prompt("Your GitHub repo (username/repo)")||"").trim();
+if(!REPO)return;KEY=tok;
+gh("GET").then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(j){
+SHA=j.sha;try{S=JSON.parse(decodeURIComponent(escape(atob(j.content.replace(/\n/g,"")))))}catch(x){}
+st.owner=true;$("#own").hidden=true;renderAll()
+}).catch(function(){KEY="";window.alert("Couldn’t sign in. Check your token and repo name.")})}
+renderAll();
+fetch("availability.json?v="+Date.now(),{cache:"no-store"}).then(function(r){return r.json()}).then(function(d){if(d&&d.days){S=d;renderAll()}}).catch(function(){});
+})();
+</script>
+</body>
+</html>
